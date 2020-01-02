@@ -8,6 +8,20 @@ void VL60k::keyProcess()
     if (autoStartTimer->isStarted())
         return;
 
+    // Проверка на нажатие Ctrl, пока в комбинациях не используется, но, может быть полезна впоследствии
+    if (isControl())
+        return;
+
+    // Проверка на нажатие Alt
+    if (isAlt())
+    {
+        // Проверка !autoStartTimer->isStarted()) не нужна, поскольку она уже есть выше
+        if (getKeyState(KEY_R))
+            autoStartTimer->start();
+        // больше Alt нигде не используется, поэтому выходим
+        return;
+    }
+
     // Управление тумблером "Токоприемники"
     if (getKeyState(KEY_U))
     {
@@ -158,10 +172,4 @@ void VL60k::keyProcess()
         rb[RBP].set();
     else
         rb[RBP].reset();
-
-    if (getKeyState(KEY_R))
-    {
-        if (isAlt() && !autoStartTimer->isStarted())
-            autoStartTimer->start();
-    }
 }
